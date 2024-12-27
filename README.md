@@ -2,6 +2,15 @@
 ![GitHub release (latest by date)](https://img.shields.io/github/v/release/interactionresearchstudio/NaturewatchCameraServer)
 ![GitHub all releases](https://img.shields.io/github/downloads/interactionresearchstudio/NaturewatchCameraServer/total)
 
+# Tweaks
+
+- Once SD card flashed, open the `boot` partition and set the wifi details in the wpa-supplicant file.
+- Once booted and connected to wifi, ssh in (user `pi` default password `badgersandfoxes`)
+- Disable hosting a network, otherwise it interferes with the connected one (at least by hosting a 2nd authoritative DHCP server via dnsmasq):
+  ```shell
+  $ sudo systemctl disable autohotspot dnsmasq hostapd`
+  ```
+
 # NaturewatchCameraServer
 
 This is the main software for the My Naturewatch Camera. It is a Python server 

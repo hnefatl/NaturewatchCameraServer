@@ -15,7 +15,7 @@ jobs:
       uses: actions/checkout@v2
       with:
         repository: 'guysoft/CustomPiOS'
-        ref: devel
+        ref: 1.4.0
         path: CustomPiOS
 
     - name: Checkout Project Repository
@@ -57,8 +57,6 @@ jobs:
     - name: Build Image
       run: |
         export BASE_IMAGE_ENLARGEROOT=2000
-        export AUTO_HOTSPOT_NAME=MyNaturewatch
-        export AUTO_HOTSPOT_PASSWORD=badgersandfoxes
         sudo modprobe loop && cd repository/os
         sudo bash -x ./build_dist
 
@@ -67,21 +65,20 @@ jobs:
 
     - name: Zip Output
       run: gzip mynaturewatch-camera.img
-    - uses: actions/upload-artifact@v1
+    - uses: actions/upload-artifact@v4
       with:
         name: mynaturewatch-camera.img.gz
         path: mynaturewatch-camera.img.gz
 
     - name: Create Release
       id: create_release
-      uses: actions/create-release@v1
+      uses: elgohr/Github-Release-Action@v5
       if: startsWith(github.ref, 'refs/tags/v')
       env:
-        GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+        GH_TOKEN: ${{ secrets.GITHUB_TOKEN }}
       with:
-        tag_name: ${{ github.ref }}
-        release_name: My Naturewatch Camera ${{ github.ref }}
-        draft: true
+        title: My Naturewatch Camera ${{ github.ref }}
+        tag: ${{ github.ref }}
         prerelease: false
 
     - name: Upload Release

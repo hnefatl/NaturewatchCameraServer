@@ -2,6 +2,36 @@
 ![GitHub release (latest by date)](https://img.shields.io/github/v/release/interactionresearchstudio/NaturewatchCameraServer)
 ![GitHub all releases](https://img.shields.io/github/downloads/interactionresearchstudio/NaturewatchCameraServer/total)
 
+# Tweaks
+
+- Once SD card flashed, open the `boot` partition and set the wifi details in the wpa-supplicant file.
+- Once booted and connected to wifi, ssh in (user `pi` default password `badgersandfoxes`)
+- Disable hosting a network, otherwise it interferes with the connected one (at least by hosting a 2nd authoritative DHCP server via dnsmasq):
+  ```shell
+  $ sudo apt purge dnsmasq hostapd
+  $ sudo systemctl disable autohotspot
+  $ sudo crontab -l | grep -v 'autohotspot' | sudo crontab -
+  ```
+- Install custom server tweaks on the pi:
+  ```shell
+  # Clone this repo to a host, run this from inside the clone repo
+  $ rsync -avr --exclude '.git' . pi@mynaturewatchcamera:/home/pi/NaturewatchCameraServer
+  
+  # SSH to the pi
+  $ ssh ...
+
+  # Set the lat/long to use for sunrise/sunset
+  $ LAT=...
+  $ LONG=...
+  $ echo "${LAT}\n${LONG}" > /home/pi/lat_long.txt
+
+  # Enable the powersaver service
+  $ sudo cp NaturewatchCameraServer/helpers/powersave.service /etc/systemd/system/powersave.service
+  $ sudo chmod 644 /etc/systemd/system/powersave.service
+  $ sudo systemctl enable powersave
+  $ sudo systemctl start powersave
+  ```
+
 # NaturewatchCameraServer
 
 This is the main software for the My Naturewatch Camera. It is a Python server 

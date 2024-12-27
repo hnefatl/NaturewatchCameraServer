@@ -57,8 +57,6 @@ jobs:
     - name: Build Image
       run: |
         export BASE_IMAGE_ENLARGEROOT=2000
-        export AUTO_HOTSPOT_NAME=MyNaturewatch
-        export AUTO_HOTSPOT_PASSWORD=badgersandfoxes
         sudo modprobe loop && cd repository/os
         sudo bash -x ./build_dist
 

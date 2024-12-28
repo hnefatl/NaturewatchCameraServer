@@ -100,6 +100,8 @@ def settings_handler():
             current_app.logger.info("Changing timelapse settings to " + str(settings["timelapse"]))
             current_app.change_detector.timelapse_active = settings["timelapse"]["active"]
             current_app.change_detector.timelapse = settings["timelapse"]["interval"]
+        if "startup_mode" in settings:
+            current_app.user_config["startup_mode"] = settings.get("startup_mode", "inactive")
         
         new_settings = construct_settings_object(current_app.camera_controller, current_app.change_detector)
         return Response(json.dumps(new_settings), mimetype='application/json')
@@ -132,7 +134,8 @@ def construct_settings_object(camera_controller, change_detector):
         "timelapse": {
             "active": current_app.change_detector.timelapse_active,
             "interval": current_app.change_detector.timelapse,
-        }
+        },
+        "startup_mode": current_app.user_config.get("startup_mode", "inactive"),
     }
     return settings
 

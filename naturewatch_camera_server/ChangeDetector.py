@@ -30,7 +30,7 @@ class ChangeDetector(Thread):
         self.device_time = None
         self.device_time_start = None
 
-        self.mode = "inactive"
+        self.mode = self.config.get("startup_mode", "inactive")
         self.session_start_time = None
         self.avg = None
         self.lastPhotoTime = self.get_fake_time()

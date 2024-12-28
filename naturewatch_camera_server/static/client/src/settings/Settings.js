@@ -15,6 +15,7 @@ class Settings extends React.Component {
         this.onShutterChange = this.onShutterChange.bind(this);
         this.onShutterChangeEnd = this.onShutterChangeEnd.bind(this);
         this.onModeChange = this.onModeChange.bind(this);
+        this.onStartupModeChange = this.onStartupModeChange.bind(this);
         this.onTimelapseActiveChange = this.onTimelapseActiveChange.bind(this);
         this.onIntervalChange = this.onIntervalChange.bind(this);
         this.onIntervalChangeEnd = this.onIntervalChangeEnd.bind(this);
@@ -33,7 +34,8 @@ class Settings extends React.Component {
                 timelapse : {
                     active: false,
                     interval: 0
-                }
+                },
+                startup_mode: "",
             }
         };
 
@@ -150,6 +152,17 @@ class Settings extends React.Component {
             settings: currentSettings
         }, () => {
             console.log("INFO: Changed exposure mode.");
+            this.postSettings();
+        });
+    }
+
+    onStartupModeChange(event) {
+        let currentSettings = this.state.settings;
+        currentSettings.startup_mode = event.target.value;
+        this.setState({
+            settings: currentSettings
+        }, () => {
+            console.log("INFO: Changed startup mode.");
             this.postSettings();
         });
     }
@@ -293,6 +306,20 @@ class Settings extends React.Component {
                                         intervalPos={this.intervalValueToPos(this.state.settings.timelapse.interval)}
                                         interval={this.state.settings.timelapse.interval}
                                     />
+                                </Card.Body>
+                            </Accordion.Collapse>
+                        </Card>
+                        <Card>
+                            <Accordion.Toggle as={Card.Header} eventKey={5}>
+                                Startup Mode
+                            </Accordion.Toggle>
+                            <Accordion.Collapse eventKey={5}>
+                                <Card.Body>
+                                    <select value={this.state.settings.startup_mode} onChange={this.onStartupModeChange}>
+                                        <option value="inactive">Inactive</option>
+                                        <option value="photo">Photo</option>
+                                        <option value="video">Video</option>
+                                    </select>
                                 </Card.Body>
                             </Accordion.Collapse>
                         </Card>
